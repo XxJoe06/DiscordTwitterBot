@@ -272,22 +272,22 @@ module.exports = class DiscordController extends require("./template.js") {
     }
 
     async handleCommand(command, args, channel, user, options = {}) {
-        const execution = await app.Command.checkAndRun(command, args, channel, user, {
-            platform: {
-                id: 0,
-                name: "discord"
-            },
-            ...options
-        });
-    
-        if (!execution) {
-            return;
-        }
-    
-        const { reply, tweetLink, tweet } = execution; // Assuming there's a tweetLink and tweet property in the execution result
-    
-        // Construct the tweet message content with @everyone mention at the start
-        const tweetContent = `@everyone New tweet from ${tweet.username}: ${tweet.text}`;
+		const execution = await app.Command.checkAndRun(command, args, channel, user, {
+			platform: {
+				id: 0,
+				name: "discord"
+			},
+			...options
+		});
+	
+		if (!execution) {
+			return;
+		}
+	
+		const { reply, tweetLink, tweet } = execution; // Assuming there's a tweetLink and tweet property in the execution result
+	
+		// Construct the tweet message content with @everyone mention at the start
+		const tweetContent = `@everyone New tweet from ${tweet.username}: ${tweet.text}`;
     
         const embeds = execution?.discord?.embeds ?? [];
         if (embeds.length !== 0) {
