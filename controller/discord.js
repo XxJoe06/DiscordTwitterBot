@@ -286,29 +286,26 @@ module.exports = class DiscordController extends require("./template.js") {
 	
 		const { reply, tweetLink, tweet } = execution; // Assuming there's a tweetLink and tweet property in the execution result
 	
-		// Replace "123456789012345678" with the actual role ID you want to mention
-		const roleToMention = "<@&123456789012345678>";
-	
-		// Construct the tweet message content with the mentioned role and tweet information
-		const tweetContent = `${roleToMention} New tweet from ${tweet.username}: ${tweet.text}`;
-	
-		const embeds = execution?.discord?.embeds ?? [];
-		if (embeds.length !== 0) {
-			// Add a button to the embed message with custom emoji URL
-			const embed = embeds[0];
-			const button = new MessageActionRow().addComponents(
-				new MessageButton()
-					.setCustomId('tweet_button')
-					.setEmoji('https://cdn.discordapp.com/emojis/1129096257986642032.webp?size=96&quality=lossless')
-					.setLabel('View Tweet')
-					.setStyle('PRIMARY')
-			);
-	
-			await this.send(tweetContent, channel, { embeds: [embed], components: [button] });
-		} else {
-			await this.send(tweetContent, channel);
-		}
-	}
+		// Construct the tweet message content with @everyone mention at the start
+		const tweetContent = `@everyone New tweet from ${tweet.username}: ${tweet.text}`;
+    
+        const embeds = execution?.discord?.embeds ?? [];
+        if (embeds.length !== 0) {
+            // Add a button to the embed message with custom emoji URL
+            const embed = embeds[0];
+            const button = new MessageActionRow().addComponents(
+                new MessageButton()
+                    .setCustomId('tweet_button')
+                    .setEmoji('https://cdn.discordapp.com/emojis/1129096257986642032.webp?size=96&quality=lossless')
+                    .setLabel('View Tweet')
+                    .setStyle('PRIMARY')
+            );
+    
+            await this.send(tweetContent, channel, { embeds: [embed], components: [button] });
+        } else {
+            await this.send(tweetContent, channel);
+        }
+    }
     parseMessage(messageObject) {
         const content = messageObject.content.replace(/<(https?:\/\/.+?)>/g, "$1");
         const args = content.split(" ");
